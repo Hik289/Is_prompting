@@ -1,0 +1,11 @@
+name: "gpt_oss_120b"
+display_name: "GPT-OSS 120B"
+family: "gpt_oss"
+size_b: 120
+hf_id: "openai/gpt-oss-120b"
+hidden_size: 8192
+num_attention_heads: 64
+num_layers: 80
+max_position: 8192
+target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+is_default_teacher: true

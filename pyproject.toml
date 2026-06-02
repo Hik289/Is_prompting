@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proca"
+version = "0.1.0"
+description = "ProCA: Prototype-driven Contrastive Cultural Alignment for LLMs."
+requires-python = ">=3.9"
+readme = "README.md"
+dependencies = [
+    "torch>=2.1.0",
+    "transformers>=4.40.0",
+    "peft>=0.10.0",
+    "datasets>=2.18.0",
+    "scikit-learn>=1.3.0",
+    "pandas>=2.0.0",
+    "scipy>=1.11.0",
+    "pyyaml>=6.0",
+    "tqdm>=4.66.0",
+    "numpy>=1.24.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4.0"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["proca*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"

@@ -1,0 +1,10 @@
+name: "gpt_oss_20b"
+display_name: "GPT-OSS 20B"
+family: "gpt_oss"
+size_b: 20
+hf_id: "openai/gpt-oss-20b"
+hidden_size: 4096
+num_attention_heads: 32
+num_layers: 32
+max_position: 8192
+target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]

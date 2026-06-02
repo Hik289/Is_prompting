@@ -1,0 +1,80 @@
+# ProCA default configuration
+# Hyperparameters explicitly stated in the paper unless noted otherwise.
+
+# --- Cultures ---
+cultures: [CN, DE, UK, MX, JP]            # China, Germany, UK, Mexico, Japan
+n_cultures: 5
+
+# --- TGSIS / synthesis ---
+synthesis:
+  prototype_dim: 128                       # d_c = 128
+  scenario_source: "sotopia"               # base scenario template source
+  teacher_model: "gpt_oss_120b"            # default teacher G (paper uses GPT-OSS 120B)
+  teacher_backend: "mock"                  # mock | openai | vllm
+  n_dialogues_per_culture: 8400            # ~42k total across 5 cultures
+  dialogue_min_turns: 6                    # paper: 6-12 turns
+  dialogue_max_turns: 12
+
+# --- UCCA ---
+ucca:
+  context_encoder:
+    backbone: "mock-transformer"           # HF id when not in --mock mode
+    hidden_size: 64                        # mock; replaced from model card otherwise
+    pool: "mean"
+  intent_encoder:
+    backbone: "mock-transformer"
+    hidden_size: 64
+    share_backbone: false                  # share with context_encoder backbone (LoRA different heads)
+  value_head:
+    num_choices: 5                         # Likert-5 default for WVS items; per-question override possible
+    mlp_hidden: 128
+  contrastive:
+    tau: 0.07                              # τ
+    lambda: 0.5                            # λ weighting (Eq. 5)
+
+# --- LoRA ---
+lora:
+  r: 64
+  alpha: 128
+  dropout: 0.05
+  target_modules: ["q_proj", "v_proj"]
+
+# --- Optimization ---
+training:
+  lr: 2.0e-5
+  batch_size: 32
+  epochs: 3
+  weight_decay: 0.0
+  seed: 42
+
+# --- Iterative refinement ---
+refinement:
+  R: 2                                     # number of refinement rounds
+  top_k_ratio: 0.70                        # retain top 70%
+  use_importance_sampling: false           # if true, sample with weights instead of hard top-K
+  confidence_metric: "neg_entropy"         # entropy-based (lower entropy => higher confidence)
+
+# --- Evaluation ---
+evaluation:
+  wave: 7                                  # WVS Wave 7
+  category: "social_values_norms_stereotypes"  # 44 questions per culture
+  n_questions_per_culture: 44
+  n_personas_per_culture: 1000
+  metric_primary: "kl_divergence"
+  metric_secondary: "jensen_shannon"
+  persona_level_accuracy: true
+  invalid_option_safeguard: true
+
+# --- Dry-run / mock (CODE_REPRO framework only) ---
+dryrun:
+  n_steps: 2
+  fake_data: true
+
+# --- Paths (override on CLI) ---
+paths:
+  wvs_csv: "data/mock_wvs.csv"
+  sotopia_json: "data/mock_sotopia.json"
+  prototypes_out: "artifacts/prototypes.pt"
+  syn_data_dir: "artifacts/synthetic"
+  ckpt_dir: "artifacts/checkpoints"
+  results_dir: "results"

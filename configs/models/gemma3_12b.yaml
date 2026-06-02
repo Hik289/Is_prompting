@@ -1,0 +1,10 @@
+name: "gemma3_12b"
+display_name: "Gemma3 12B"
+family: "gemma3"
+size_b: 12
+hf_id: "google/gemma-3-12b-it"
+hidden_size: 3840
+num_attention_heads: 16
+num_layers: 48
+max_position: 8192
+target_modules: ["q_proj", "v_proj"]

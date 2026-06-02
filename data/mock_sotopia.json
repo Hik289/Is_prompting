@@ -1,0 +1,134 @@
+[
+  {
+    "scenario_id": "sotopia_mock_000",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 0. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_001",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 1. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_002",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 2. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_003",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 3. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_004",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 4. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_005",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 5. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_006",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 6. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_007",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 7. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_008",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 8. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_009",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 9. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_010",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 10. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  },
+  {
+    "scenario_id": "sotopia_mock_011",
+    "template": "Two colleagues are meeting to discuss a delayed shipment in scenario 11. They must reach an agreement on next steps.",
+    "roles": [
+      "Manager",
+      "Vendor"
+    ],
+    "metadata": {
+      "source": "mock"
+    }
+  }
+]

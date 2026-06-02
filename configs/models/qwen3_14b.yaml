@@ -1,0 +1,10 @@
+name: "qwen3_14b"
+display_name: "Qwen3 14B"
+family: "qwen3"
+size_b: 14
+hf_id: "Qwen/Qwen3-14B"
+hidden_size: 5120
+num_attention_heads: 40
+num_layers: 40
+max_position: 32768
+target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
