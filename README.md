@@ -1,143 +1,120 @@
-# ProCA: Prototype-driven Contrastive Cultural Alignment
+<div align="center">
 
-Official implementation of
+# ProCA
 
-> **Is Prompting Enough for Cultural Alignment? Learning Prototype-Aware Values with Contrastive Adaptation in Large Language Models**
+### Is Prompting Enough for Cultural Alignment?
 
-ProCA reformulates cultural value alignment as contrastive representation
-learning in a *cultural prototype space* derived from human survey data.
-It combines (i) theory-guided social interaction synthesis, (ii) a unified
-KL + contrastive training objective, and (iii) an iterative refinement loop
-that re-curates training data using the model's own cultural understanding.
+**Learning Prototype-Aware Values with Contrastive Adaptation in Large Language Models**
 
----
+<p>
+  <a href="#installation"><img alt="Python" src="https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white"></a>
+  <a href="#installation"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C?logo=pytorch&logoColor=white"></a>
+  <a href="#quickstart"><img alt="Quickstart" src="https://img.shields.io/badge/Quickstart-mock%20dry--run-2EA44F"></a>
+  <a href="#reproducing-the-experiments"><img alt="Reproduce" src="https://img.shields.io/badge/Reproduce-scripts-1F6FEB"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-34D058"></a>
+</p>
 
-## Overview                  
+<p>
+  <a href="#motivation">Motivation</a> |
+  <a href="#method">Method</a> |
+  <a href="#quickstart">Quickstart</a> |
+  <a href="#reproducing-the-experiments">Experiments</a> |
+  <a href="#citation">Citation</a>
+</p>
 
-| Component                              | Module                                |
-|----------------------------------------|---------------------------------------|
-| Cultural prototypes  `C`               | `proca/prototypes.py`                 |
-| Dialogue synthesis  `G(s, c_k)`        | `proca/synthesis.py`                  |
-| Context encoder + value head           | `proca/encoders.py`                   |
-| Intent encoder                         | `proca/encoders.py`                   |
-| KL loss / contrastive loss / unified   | `proca/losses.py`                     |
-| Refinement scoring + filtering         | `proca/refinement.py`                 |
-| Training loop                          | `proca/train.py`                      |
-| WVS / cross-lingual evaluation         | `proca/eval/`                         |
-| Persona & Cultural-prompt baselines    | `proca/eval/baselines.py`             |
-| Ablations                              | `proca/ablations/`                    |
+</div>
 
----
+ProCA is a research codebase for cultural alignment beyond inference-time
+prompting. Instead of asking a model to "act as" a culture at test time, ProCA
+learns a prototype-aware value space anchored in aggregate World Values Survey
+(WVS) response distributions. The framework uses these prototypes to generate
+culture-adapted social interactions, jointly optimizes explicit WVS alignment
+and contrastive cultural separation, and refines the training set with the
+model's own cultural-relevance scores.
+
+The repository is designed for both full experiments and lightweight
+reproducibility: every major pipeline has a CPU-friendly mock path, so the full
+train, score, refine, and evaluate loop can be smoke-tested without downloading
+large backbones.
+
+## Motivation
+
+Prompting can steer surface behavior, but cultural alignment requires a model to
+represent how value distributions differ across social contexts. ProCA treats
+each culture as a survey-derived prototype and trains the model to pull
+matching dialogues toward the right prototype while pushing mismatched cultural
+signals apart.
+
+![ProCA motivation: default model values, shallow prompting, and prototype-aware cultural alignment](assets/fig_motivation.png)
+
+## Method
+
+ProCA has three stages. First, WVS responses are projected into a compact
+cultural prototype space and used to guide synthetic social dialogue generation.
+Second, a unified adaptation objective combines distributional WVS alignment
+with prototype-aware contrastive learning. Third, the trained model scores the
+cultural relevance of generated dialogues, filters or resamples training data,
+and repeats the adaptation loop.
+
+![ProCA pipeline: data synthesis, unified contrastive training, and iterative refinement](assets/proca_architecture.png)
+
+The original vector version of the pipeline figure is available at
+[assets/proca_architecture.pdf](assets/proca_architecture.pdf).
+
+## Highlights
+
+| Capability | What is included |
+| --- | --- |
+| Survey-grounded prototypes | WVS-based cultural prototype construction and mock fixtures for fast testing |
+| Social interaction synthesis | Scenario-conditioned dialogue generation with pluggable teacher backends |
+| Unified adaptation objective | KL alignment to WVS answer distributions plus prototype-aware contrastive loss |
+| Iterative refinement | Cultural-relevance scoring, filtering, and resampling across refinement rounds |
+| Evaluation suite | WVS alignment, cross-lingual transfer, prompt baselines, and ablation entry points |
+| Reproducible smoke tests | CPU-only mock training and evaluation paths for CI and local checks |
 
 ## Installation
 
 ```bash
-python3 -m venv .venv && source .venv/bin/activate
+git clone git@github.com:Hik289/Is_prompting.git
+cd Is_prompting
+
+python3 -m venv .venv
+source .venv/bin/activate
+
 pip install -r requirements.txt
-# or, editable install with dev extras:
+# or install the package in editable mode:
 pip install -e .[dev]
 ```
 
-GPU training requires PyTorch with CUDA, `transformers`, and `peft`.
-CPU is sufficient for the lightweight test mode described below.
-
----
+GPU training uses PyTorch, Transformers, and PEFT. The mock mode below runs on
+CPU and is intended for CI, reviewers, and quick repository checks.
 
 ## Quickstart
 
-### 1. Run the test suite
+Run the test suite:
 
 ```bash
 pytest tests/ -v
 ```
 
-### 2. Train on a tiny in-memory dataset (no downloads)
+Run the full pipeline on bundled mock data:
 
 ```bash
 python -m proca.train --config configs/proca_default.yaml --mock --dry-run
 ```
 
-The `--mock` flag swaps the HuggingFace backbones for a small random-init
-transformer (`vocab=1000, hidden=64, 2 layers`) and replaces the WVS /
-Sotopia loaders with bundled fixtures, so the entire `train → score → refine
-→ retrain` loop runs in seconds on a laptop. `--dry-run` further caps the
-number of optimization steps. These flags are intended for CI and for
-contributors without GPUs; production runs simply omit them.
+The mock path replaces large HuggingFace backbones with a tiny random-init
+transformer and uses bundled WVS/Sotopia fixtures. The dry run caps the number
+of optimization steps, so the complete train, score, refine, and retrain loop
+finishes quickly on a laptop.
 
-### 3. Evaluate on the WVS
+Evaluate a trained or mock checkpoint on one culture:
 
 ```bash
-python -m proca.eval.wvs_eval --culture China
+python -m proca.eval.wvs_eval --culture China --mock
 ```
 
-For full benchmarking across all five regions and both inference-time
-baselines:
-
-```bash
-bash scripts/eval_all.sh --ckpt artifacts/checkpoints/final.pt
-```
-
----
-
-## Training on real data
-
-1. **WVS Wave 7.** Place the per-respondent CSV at `data/wvs_wave7.csv`.
-   The loader (`proca.data.load_wvs_csv`) expects a `culture` column and
-   integer `Q*` answer columns.
-2. **Sotopia scenarios.** Place the scenario JSON at
-   `data/sotopia_scenarios.json` (schema matches `data/mock_sotopia.json`).
-3. **Teacher model.** Implement `generate()` in
-   `proca.synthesis.OpenAITeacher` or `proca.synthesis.VLLMTeacher`
-   (a no-op `MockTeacher` is provided for testing).
-4. **Backbone.** Choose a model card from `configs/models/` — currently
-   `gpt_oss_{20b,120b}`, `qwen3_{8b,14b,32b}`, `gemma3_{4b,12b,27b}` —
-   and pass it via `--model-config`.
-5. Launch:
-
-```bash
-python -m proca.train \
-    --config configs/proca_default.yaml \
-    --model-config configs/models/gpt_oss_20b.yaml
-```
-
----
-
-## Configuration
-
-All hyperparameters live in `configs/proca_default.yaml`:
-
-| Hyperparameter      | Default  |
-|---------------------|----------|
-| `d_c` (prototype)   | 128      |
-| `λ` (contrastive)   | 0.5      |
-| `τ` (temperature)   | 0.07     |
-| LoRA `r` / `α`      | 64 / 128 |
-| Learning rate       | 2e-5     |
-| Batch size          | 32       |
-| Epochs              | 3        |
-| Refinement rounds R | 2        |
-| Top-K ratio         | 0.70     |
-| Dialogue turns      | 6 – 12   |
-| Personas / culture  | 1000     |
-| WVS questions       | 44       |
-
-The contrastive loss uses in-batch negatives (each dialogue is contrasted
-against the prototypes of all other cultures in the batch).
-
----
-
-## Reproducing the experiments
-
-| Result                                                  | Entry point                                                                  |
-|---------------------------------------------------------|------------------------------------------------------------------------------|
-| KL-D across five cultures and eight backbones           | `bash scripts/eval_all.sh --ckpt <path>`                                     |
-| Reasoning-only fine-tuning baseline (GSM8K / MathChat)  | `python -m proca.ablations.reasoning_only --dataset gsm8k`                   |
-| `dialogue_only` ablation (drops `L_cont`)               | `python -m proca.ablations.dialogue_only`                                    |
-| `intent_only` ablation (drops `L_KL`)                   | `python -m proca.ablations.intent_only`                                      |
-| Cross-lingual transfer                                  | `python -m proca.eval.xling_eval --culture <name>`                           |
-| Teacher-model robustness (Qwen3 32B vs. GPT-OSS 120B)   | `python -m proca.ablations.teacher_swap --teacher qwen3_32b`                 |
-
-End-to-end smoke test (for CI):
+Run the all-in-one smoke scripts:
 
 ```bash
 bash scripts/train_proca.sh   --mock --dry-run
@@ -145,45 +122,95 @@ bash scripts/eval_all.sh      --mock
 bash scripts/run_ablations.sh --mock --dry-run
 ```
 
----
+## Training on Real Data
 
-## Repository layout
+1. Place WVS Wave 7 responses at `data/wvs_wave7.csv`. The loader expects a
+   culture column and integer WVS answer columns.
+2. Place Sotopia-style scenario templates at `data/sotopia_scenarios.json`.
+3. Wire up a teacher backend in `proca/synthesis.py`. The repository keeps
+   external OpenAI/vLLM calls as hooks so the mock path remains fully local.
+4. Set the real backbone IDs in `configs/proca_default.yaml` under
+   `ucca.context_encoder.backbone` and `ucca.intent_encoder.backbone`. The
+   files in `configs/models/` record the model metadata used for experiments.
+5. Launch training:
 
+```bash
+python -m proca.train --config configs/proca_default.yaml
 ```
-configs/                YAML configuration files
-  models/               Per-backbone model cards
-data/                   Bundled lightweight fixtures
+
+Current model-card templates cover GPT-OSS, Qwen3, and Gemma3 families for
+documentation and experiment tracking. The default configuration uses five
+cultures: China, Germany, United Kingdom, Mexico, and Japan.
+
+## Configuration
+
+Core hyperparameters are collected in
+[configs/proca_default.yaml](configs/proca_default.yaml).
+
+| Setting | Default |
+| --- | --- |
+| Prototype dimension | 128 |
+| Contrastive weight | 0.5 |
+| Contrastive temperature | 0.07 |
+| LoRA rank / alpha | 64 / 128 |
+| Learning rate | 2e-5 |
+| Batch size | 32 |
+| Epochs | 3 |
+| Refinement rounds | 2 |
+| Top-K retain ratio | 0.70 |
+| Dialogue length | 6-12 turns |
+| Personas per culture | 1000 |
+| WVS questions | 44 |
+
+## Reproducing the Experiments
+
+| Experiment | Entry point |
+| --- | --- |
+| WVS alignment across cultures and backbones | `bash scripts/eval_all.sh --ckpt <path>` |
+| Prompting baselines | `python -m proca.eval.wvs_eval --culture <name> --baseline cultural` |
+| Cross-lingual transfer | `python -m proca.eval.xling_eval --culture <name>` |
+| Dialogue-only ablation | `python -m proca.ablations.dialogue_only` |
+| Intent-only ablation | `python -m proca.ablations.intent_only` |
+| Reasoning-only fine-tuning baseline | `python -m proca.ablations.reasoning_only --dataset gsm8k_mock` |
+| Teacher-model robustness | `python -m proca.ablations.teacher_swap --teacher qwen3_32b` |
+
+## Repository Layout
+
+```text
+configs/                YAML configuration files and model cards
+data/                   Lightweight fixtures for mock runs
 proca/                  Library source
-  prototypes.py         Cultural prototype space
-  synthesis.py          Teacher-guided dialogue generation
-  encoders.py           Context + value head + intent encoder
-  losses.py             KL, contrastive, unified objectives
-  model.py              ProCAModel (orchestration + LoRA)
-  refinement.py         Iterative scoring + filtering
-  train.py              Training loop (Algorithm 1)
-  data.py               WVS / dialogue loaders & batching
-  eval/                 WVS, cross-lingual, baselines
+  prototypes.py         Cultural prototype construction
+  synthesis.py          Culture-adapted dialogue synthesis
+  encoders.py           Context, intent, and value encoders
+  losses.py             KL, contrastive, and unified objectives
+  model.py              ProCA model wrapper
+  refinement.py         Cultural-relevance scoring and filtering
+  train.py              Training and refinement loop
+  eval/                 WVS, cross-lingual, and baseline evaluation
   ablations/            Ablation entry points
-scripts/                Convenience shell wrappers
-tests/                  pytest suite (CPU only)
+scripts/                Reproduction scripts
+tests/                  CPU-friendly pytest suite
+assets/                 README figures
 ```
-
----
 
 ## Ethics
 
-ProCA aligns models to *aggregate* World Values Survey response
-distributions, not to prescriptive cultural norms. Aggregate trends should
-not be assumed to apply to any individual, and cultural contextualization
-must never be used to justify human-rights violations. We recommend
-human-supervised deployment.
-
----
+ProCA aligns models to aggregate survey distributions, not to prescriptive
+cultural norms. Aggregate trends should not be treated as claims about
+individual people, and cultural contextualization should not override universal
+safety, fairness, or human-rights constraints. We recommend human-supervised
+deployment and careful reporting of population-level assumptions.
 
 ## Citation
 
-If you use this code, please cite the original paper.
+If this repository is useful for your work, please cite the accompanying paper:
+
+**Is Prompting Enough for Cultural Alignment? Learning Prototype-Aware Values
+with Contrastive Adaptation in Large Language Models**
+
+BibTeX will be added here once the public manuscript metadata is released.
 
 ## License
 
-Released under the MIT License — see [LICENSE](LICENSE).
+This project is released under the MIT License. See [LICENSE](LICENSE).
