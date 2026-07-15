@@ -7,11 +7,8 @@
 **Learning Prototype-Aware Values with Contrastive Adaptation in Large Language Models**
 
 <p>
-  <a href="#installation"><img alt="Python" src="https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white"></a>
-  <a href="#installation"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-2.1%2B-EE4C2C?logo=pytorch&logoColor=white"></a>
-  <a href="#quickstart"><img alt="Quickstart" src="https://img.shields.io/badge/Quickstart-mock%20dry--run-2EA44F"></a>
-  <a href="#reproducing-the-experiments"><img alt="Reproduce" src="https://img.shields.io/badge/Reproduce-scripts-1F6FEB"></a>
-  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-34D058"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license"></a>
+  <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.9%2B-3776AB.svg" alt="Python 3.9+"></a>
 </p>
 
 <p>
