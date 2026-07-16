@@ -14,7 +14,7 @@
 <p>
   <a href="#motivation">Motivation</a> |
   <a href="#method">Method</a> |
-  <a href="#quickstart">Quickstart</a> |
+  <a href="#quick-start">Quick Start</a> |
   <a href="#reproducing-the-experiments">Experiments</a> |
   <a href="#citation">Citation</a>
 </p>
@@ -33,6 +33,12 @@ The repository is designed for both full experiments and lightweight
 reproducibility: every major pipeline has a CPU-friendly mock path, so the full
 train, score, refine, and evaluate loop can be smoke-tested without downloading
 large backbones.
+
+## At a Glance
+
+- **Research question.** Is prompting alone sufficient for cultural alignment across values, norms, and everyday knowledge?
+- **Core idea.** ProCA learns prototype-aware cultural representations with contrastive adaptation rather than relying only on prompt templates.
+- **What is included.** Training, evaluation, ablations, cross-lingual transfer settings, and ethics notes for cultural-alignment experiments.
 
 ## Motivation
 
@@ -58,7 +64,7 @@ and repeats the adaptation loop.
 The original vector version of the pipeline figure is available at
 [assets/proca_architecture.pdf](assets/proca_architecture.pdf).
 
-## Highlights
+## Key Contributions
 
 | Capability | What is included |
 | --- | --- |
@@ -86,7 +92,7 @@ pip install -e .[dev]
 GPU training uses PyTorch, Transformers, and PEFT. The mock mode below runs on
 CPU and is intended for CI, reviewers, and quick repository checks.
 
-## Quickstart
+## Quick Start
 
 Run the test suite:
 
@@ -171,7 +177,7 @@ Core hyperparameters are collected in
 | Reasoning-only fine-tuning baseline | `python -m proca.ablations.reasoning_only --dataset gsm8k_mock` |
 | Teacher-model robustness | `python -m proca.ablations.teacher_swap --teacher qwen3_32b` |
 
-## Repository Layout
+## Repository Structure
 
 ```text
 configs/                YAML configuration files and model cards
