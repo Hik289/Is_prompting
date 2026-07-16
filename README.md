@@ -1,25 +1,25 @@
-<div align="center">
+<h1 align="center">ProCA</h1>
 
-# ProCA
+<p align="center">
+  <strong>Is Prompting Enough for Cultural Alignment?</strong>
+</p>
 
-### Is Prompting Enough for Cultural Alignment?
+<p align="center">
+  <strong>Learning Prototype-Aware Values with Contrastive Adaptation in Large Language Models</strong>
+</p>
 
-**Learning Prototype-Aware Values with Contrastive Adaptation in Large Language Models**
-
-<p>
+<p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="MIT license"></a>
   <a href="pyproject.toml"><img src="https://img.shields.io/badge/Python-3.9%2B-3776AB.svg" alt="Python 3.9+"></a>
 </p>
 
-<p>
+<p align="center">
   <a href="#motivation">Motivation</a> |
   <a href="#method">Method</a> |
   <a href="#quick-start">Quick Start</a> |
   <a href="#reproducing-the-experiments">Experiments</a> |
   <a href="#citation">Citation</a>
 </p>
-
-</div>
 
 ProCA is a research codebase for cultural alignment beyond inference-time
 prompting. Instead of asking a model to "act as" a culture at test time, ProCA
