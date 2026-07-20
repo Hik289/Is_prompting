@@ -32,3 +32,18 @@ data/sotopia_scenarios*.json
 
 # Logs
 *.log
+
+# Shared research-artifact hygiene
+.AppleDouble
+._*
+*~
+.mypy_cache/
+.ruff_cache/
+env/
+.env.*
+!.env.example
+outputs/
+runs/
+logs/
+wandb/
+*.tmp

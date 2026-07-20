@@ -205,6 +205,13 @@ individual people, and cultural contextualization should not override universal
 safety, fairness, or human-rights constraints. We recommend human-supervised
 deployment and careful reporting of population-level assumptions.
 
+## Artifact Checklist
+
+- **Code release.** Core implementations, configuration files, and reproduction entry points are versioned in this repository.
+- **Reproducibility.** Start with the smoke or quick-start path before paper-scale runs; record the commit hash, Python version, backend/model identifiers, seeds, and command-line arguments.
+- **Data and credentials.** Large datasets, benchmark downloads, generated outputs, and API keys are intentionally excluded. Use the data and configuration notes above to recreate them or point to local copies.
+- **Reporting.** For paper-scale runs, keep raw run folders immutable and regenerate tables or figures from the logged artifacts with the listed analysis scripts.
+
 ## Citation
 
 If this repository is useful for your work, please cite the accompanying paper:
