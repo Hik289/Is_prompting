@@ -34,11 +34,11 @@ reproducibility: every major pipeline has a CPU-friendly mock path, so the full
 train, score, refine, and evaluate loop can be smoke-tested without downloading
 large backbones.
 
-## At a Glance
+## Repository Summary
 
-- **Research question.** Is prompting alone sufficient for cultural alignment across values, norms, and everyday knowledge?
-- **Core idea.** ProCA learns prototype-aware cultural representations with contrastive adaptation rather than relying only on prompt templates.
-- **What is included.** Training, evaluation, ablations, cross-lingual transfer settings, and ethics notes for cultural-alignment experiments.
+- **Scope.** Is prompting alone sufficient for cultural alignment across values, norms, and everyday knowledge?
+- **Method.** ProCA learns prototype-aware cultural representations with contrastive adaptation rather than relying only on prompt templates.
+- **Contents.** Training, evaluation, ablations, cross-lingual transfer settings, and ethics notes for cultural-alignment experiments.
 
 ## Motivation
 
@@ -66,7 +66,7 @@ The original vector version of the pipeline figure is available at
 
 ## Key Contributions
 
-| Capability | What is included |
+| Capability | Contents |
 | --- | --- |
 | Survey-grounded prototypes | WVS-based cultural prototype construction and mock fixtures for fast testing |
 | Social interaction synthesis | Scenario-conditioned dialogue generation with pluggable teacher backends |
@@ -205,16 +205,16 @@ individual people, and cultural contextualization should not override universal
 safety, fairness, or human-rights constraints. We recommend human-supervised
 deployment and careful reporting of population-level assumptions.
 
-## Reviewer Guide
+## Artifact Notes
 
-For a reviewer-oriented map of smoke checks, paper-scale entry points, data boundaries, and reporting metadata, see [Artifact Guide](docs/ARTIFACT.md).
+Reproduction notes are in [docs/ARTIFACT.md](docs/ARTIFACT.md): environment files, smoke checks, data boundaries, and paper-scale entry points.
 
-## Artifact Checklist
+## Reproducibility Notes
 
-- **Code release.** Core implementations, configuration files, and reproduction entry points are versioned in this repository.
-- **Reproducibility.** Start with the smoke or quick-start path before paper-scale runs; record the commit hash, Python version, backend/model identifiers, seeds, and command-line arguments.
-- **Data and credentials.** Large datasets, benchmark downloads, generated outputs, and API keys are intentionally excluded. Use the data and configuration notes above to recreate them or point to local copies.
-- **Reporting.** For paper-scale runs, keep raw run folders immutable and regenerate tables or figures from the logged artifacts with the listed analysis scripts.
+- **Release.** Source code, configuration files, and runnable entry points are tracked here.
+- **Runs.** Start with the smoke or quick-start commands before full grids; record commit hash, Python version, model/backend identifiers, seeds, and command-line arguments.
+- **Data.** Large datasets, benchmark downloads, generated outputs, and API keys are not tracked. Use the data/configuration notes above to recreate or point to local copies.
+- **Reporting.** Keep raw run folders fixed for paper-scale runs and regenerate tables or figures from logged artifacts with the listed scripts.
 
 ## Citation
 
